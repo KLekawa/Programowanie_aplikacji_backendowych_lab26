@@ -27,12 +27,6 @@ public class Program
 
         app.UseAuthorization();
 
-        app.MapGet("/api/customers", (ICustomerService service, HttpContext httpContext) =>
-            {
-                return service.GetCustomer();
-            })
-            .WithName("GetCustomers");
-
         app.Run();
     }
 }
