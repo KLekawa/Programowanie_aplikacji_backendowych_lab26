@@ -11,14 +11,14 @@ public record PersonDto : ContactBaseDto
     public Gender Gender { get; init; }
     public Guid? EmployerId { get; init; }
 
-    public PersonDto FromEntity(Person person) => new()
+    public static PersonDto FromEntity(Person person) => new()
     {
         FirstName = person.FirstName,
         LastName = person.LastName,
         Position = person.Position,
         BirthDate = person.BirthDate,
         Gender = person.Gender,
-        EmployerId = person.Employer.Id
+        EmployerId = person.Employer?.Id,
     };
 }
 
@@ -34,7 +34,7 @@ public record CreatePersonDto(
     AddressDto? Address
 )
 {
-    public Person ToEntity(CreatePersonDto dto, Guid id) => new()
+    public static Person ToEntity(CreatePersonDto dto, Guid id) => new()
     {
         Id = id,
         FirstName = dto.FirstName,

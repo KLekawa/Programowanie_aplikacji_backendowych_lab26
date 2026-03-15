@@ -7,14 +7,19 @@ public class MemoryPersonRepository : MemoryGenericRepository<Person>, IPersonRe
 {
     public MemoryPersonRepository() : base()
     {
-        _data.Add(Guid.NewGuid(), new Person()
+        var guid1 = Guid.NewGuid();
+        var guid2 = Guid.NewGuid();
+        
+        _data.Add(guid1, new Person()
         {
+            Id = guid1,
             FirstName = "Adam",
             LastName = "Nowak",
             Gender = Gender.Male
         });
-        _data.Add(Guid.NewGuid(), new Person()
+        _data.Add(guid2, new Person()
         {
+            Id = guid2,
             FirstName = "Ewa",
             LastName = "Kowalska",
             Gender = Gender.Female

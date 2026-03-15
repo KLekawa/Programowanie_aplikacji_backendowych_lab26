@@ -9,6 +9,15 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddControllers();
+
+        builder.Services.AddSingleton<IPersonRepositoryAsync, MemoryPersonRepository>();
+        builder.Services.AddSingleton<ICompanyRepositoryAsync, MemoryCompanyRepository>();
+        builder.Services.AddSingleton<IOrganizationRepositoryAsync, MemoryOrganizationRepository>();
+
+        builder.Services.AddSingleton<IContactUntiOfWork, MemoryContactUnitOfWork>();
+        
+        builder.Services.AddSingleton<IPersonService, MemoryPersonService>();
         // Add services to the container.
         builder.Services.AddAuthorization();
 
@@ -24,9 +33,8 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
+        app.MapControllers();
         app.Run();
     }
 }
