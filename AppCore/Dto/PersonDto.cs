@@ -44,7 +44,6 @@ public record CreatePersonDto(
         Position = dto.Position,
         BirthDate = dto.BirthDate,
         Gender = dto.Gender,
-        // Employer =  
         Address = new Address()
         {
             Street = dto.Address.Street,
