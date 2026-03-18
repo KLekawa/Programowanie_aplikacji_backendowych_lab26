@@ -8,7 +8,7 @@ public record PersonDto : ContactBaseDto
     public string LastName { get; init; }
     public string? Position { get; init; }
     public DateTime? BirthDate { get; init; }
-    public Gender Gender { get; init; }
+    public Gender? Gender { get; init; }
     public Guid? EmployerId { get; init; }
 
     public static PersonDto FromEntity(Person person) => new()
@@ -29,7 +29,7 @@ public record CreatePersonDto(
     string Phone,
     string? Position,
     DateTime? BirthDate,
-    Gender Gender,
+    Gender? Gender,
     Guid? EmployerId,
     AddressDto? Address
 )

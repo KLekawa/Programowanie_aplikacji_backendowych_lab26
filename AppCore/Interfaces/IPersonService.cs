@@ -7,8 +7,9 @@ public interface IPersonService
 {
     Task<PagedResult<PersonDto>> FindAllPeoplePaged(int page, int size);
     Task<IEnumerable<PersonDto>> FindPeopleFromCompany(Guid companyId);
-    Task<PersonDto> CreatePerson(CreatePersonDto person);
-    Task<PersonDto?> UpdatePerson(UpdatePersonDto person, Guid id);
+    Task<Person> AddPerson(CreatePersonDto person);
+    Task<Person> UpdatePerson(UpdatePersonDto person, Guid id);
+    Task<PersonDto?> GetById(Guid id);
     Task<bool> DeletePerson(Guid id);
     Task<PersonDto?> AddNote(Guid id, Note note);
     Task<PersonDto?> AddTag(Guid id, Tag tag);

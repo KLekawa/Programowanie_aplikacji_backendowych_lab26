@@ -25,16 +25,16 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
         return personDtos;
     }
 
-    public async Task<PersonDto> CreatePerson(CreatePersonDto person)
+    public async Task<Person> AddPerson(CreatePersonDto person)
     {
-        var personEntity = CreatePersonDto.ToEntity(person, Guid.NewGuid());
-        var created  = await unitOfWork.Persons.AddAsync(personEntity);
+        var entity = CreatePersonDto.ToEntity(person, Guid.NewGuid());
+        entity  = await unitOfWork.Persons.AddAsync(entity);
         await unitOfWork.SaveChangesAsync();
         
-        return PersonDto.FromEntity(created);
+        return entity;
     }
 
-    public async Task<PersonDto?> UpdatePerson(UpdatePersonDto person, Guid id)
+    public async Task<Person> UpdatePerson(UpdatePersonDto person, Guid id)
     {
         var existingPerson = await unitOfWork.Persons.FindByIdAsync(id);
         
@@ -42,7 +42,7 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
             return null;
         
         person.ApplyTo(existingPerson);
-
+        
         if (person.EmployerId.HasValue)
         {
             var company = await unitOfWork.Companies.FindByIdAsync(person.EmployerId.Value);
@@ -51,7 +51,18 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
         }
         
         await unitOfWork.SaveChangesAsync();
-        return PersonDto.FromEntity(existingPerson);
+        return existingPerson;
+    }
+
+    public async Task<PersonDto?> GetById(Guid id)
+    {
+        var entity = await unitOfWork.Persons.FindByIdAsync(id);
+
+        if (entity is null)
+            return null;
+        
+        var entityDto = PersonDto.FromEntity(entity);
+        return entityDto;
     }
 
     public async Task<bool> DeletePerson(Guid id)

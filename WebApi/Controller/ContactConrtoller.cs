@@ -1,4 +1,5 @@
-﻿using AppCore.Interfaces;
+﻿using AppCore.Dto;
+using AppCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controller;
@@ -10,5 +11,21 @@ public class ContactConrtoller(IPersonService service) : ControllerBase
     public async Task<IActionResult> GetAllPersons(int page, int size)
     {
         return Ok(await service.FindAllPeoplePaged(page, size));
+    }
+    
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetPerson(Guid id)
+    {
+        var dto = await service.GetById(id);
+        if (dto is null)
+            return NotFound();
+        return Ok(dto);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Create(CreatePersonDto dto)
+    {
+        var result = await service.AddPerson(dto);
+        return CreatedAtAction(nameof(GetPerson), new { id = result.Id }, result);
     }
 }

@@ -7,7 +7,7 @@ public class MemoryPersonRepository : MemoryGenericRepository<Person>, IPersonRe
 {
     public MemoryPersonRepository() : base()
     {
-        var guid1 = Guid.NewGuid();
+        var guid1 = Guid.Parse("987b09bd-6ae3-4fed-9e52-6b0dd5be305d");
         var guid2 = Guid.NewGuid();
         
         _data.Add(guid1, new Person()
