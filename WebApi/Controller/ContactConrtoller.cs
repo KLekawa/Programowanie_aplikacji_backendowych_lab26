@@ -28,4 +28,11 @@ public class ContactConrtoller(IPersonService service) : ControllerBase
         var result = await service.AddPerson(dto);
         return CreatedAtAction(nameof(GetPerson), new { id = result.Id }, result);
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdatePerson(Guid id, UpdatePersonDto dto)
+    {
+        var result = await service.UpdatePerson(dto, id);
+        return Ok(result);
+    }
 }

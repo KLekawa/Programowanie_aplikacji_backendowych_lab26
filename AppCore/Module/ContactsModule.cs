@@ -1,5 +1,7 @@
 using AppCore.Validators;
+using AppCore.Validators.Shared;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +15,8 @@ public static class ContactsModule
     {
         // Rejestracja walidatorów
         services.AddValidatorsFromAssemblyContaining<CreatePersonDtoValidator>();
+        services.AddValidatorsFromAssemblyContaining<UpdatePersonDtoValidator>();
+        services.AddFluentValidationAutoValidation();
         return services;
     }
 }
