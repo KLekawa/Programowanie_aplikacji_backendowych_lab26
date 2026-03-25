@@ -1,5 +1,6 @@
 ﻿using AppCore.Dto;
 using AppCore.Interfaces;
+using AppCore.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controller;
@@ -34,5 +35,29 @@ public class ContactConrtoller(IPersonService service) : ControllerBase
     {
         var result = await service.UpdatePerson(dto, id);
         return Ok(result);
+    }
+
+    [HttpPost("{contactId:guid}/notes")]
+    [ProducesResponseType(typeof(Note), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AddNote(
+        [FromRoute] Guid contactId,
+        [FromBody] CreateNoteDto dto)
+    {
+        var note = await service.AddNote(contactId, dto);
+        return CreatedAtAction(
+            nameof(GetNotes),
+            new { contactId },
+            note);
+    }
+
+    [HttpGet("{contactId:guid}/notes")]
+    [ProducesResponseType(typeof(IEnumerable<Note>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetNotes([FromRoute] Guid contactId)
+    {
+        var person = await service.GetById(contactId);
+        return Ok(person.Notes);
     }
 }

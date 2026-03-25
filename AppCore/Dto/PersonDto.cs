@@ -10,6 +10,7 @@ public record PersonDto : ContactBaseDto
     public DateTime? BirthDate { get; init; }
     public Gender? Gender { get; init; }
     public Guid? EmployerId { get; init; }
+    public List<Note> Notes { get; set; }
 
     public static PersonDto FromEntity(Person person) => new()
     {
@@ -19,6 +20,7 @@ public record PersonDto : ContactBaseDto
         BirthDate = person.BirthDate,
         Gender = person.Gender,
         EmployerId = person.Employer?.Id,
+        Notes = person.Notes,
     };
 }
 

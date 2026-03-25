@@ -59,7 +59,7 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
         var entity = await unitOfWork.Persons.FindByIdAsync(id);
 
         if (entity is null)
-            return null;
+            throw new Exception("Osoba nie znaleziona");
         
         var entityDto = PersonDto.FromEntity(entity);
         return entityDto;
@@ -79,16 +79,30 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
         }
     }
 
-    public async Task<PersonDto?> AddNote(Guid id, Note note)
+    public async Task<Note> AddNote(Guid id, CreateNoteDto note)
     {
         var existingPerson = await unitOfWork.Persons.FindByIdAsync(id);
-        if(existingPerson == null)
-            return null;
+        if (existingPerson == null)
+            throw new Exception("Osoba nie znaleziona");
+
+        if (existingPerson.Notes is null)
+        {
+            existingPerson.Notes = new List<Note>();
+        }
         
-        existingPerson.Notes.Add(note);
+        var noteEntity = new Note()
+        {
+            Id = Guid.NewGuid(),
+            Content = note.Content,
+            CreatedAt = DateTime.Now,
+            CreatedBy = null
+        };
+        
+        existingPerson.Notes.Add(noteEntity);
+        await unitOfWork.Persons.UpdateAsync(existingPerson);
         await unitOfWork.SaveChangesAsync();
-        
-        return PersonDto.FromEntity(existingPerson);
+
+        return noteEntity;
     }
 
     public async Task<PersonDto?> AddTag(Guid id, Tag tag)
