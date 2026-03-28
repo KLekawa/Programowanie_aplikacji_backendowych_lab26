@@ -27,18 +27,23 @@ public class Program
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
+        
+        builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();    
+        builder.Services.AddProblemDetails();
 
         var app = builder.Build();
-
+        
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
         }
-
+        
+        app.UseExceptionHandler(); // ta warstwa musi być przed mapowaniem kontrolerów
+        app.MapControllers();
+        
         app.UseHttpsRedirection();
         app.UseAuthorization();
-        app.MapControllers();
         app.Run();
     }
 }

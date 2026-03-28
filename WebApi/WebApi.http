@@ -1,17 +1,21 @@
 @WebApi_HostAddress = http://localhost:5154
 
+### Wyświetlanie kontaków - błędne (brak query)
 GET {{WebApi_HostAddress}}/api/contacts
 Accept: application/json
 
-###
+
+### Wyświetlanie kontaków - poprawne
 GET {{WebApi_HostAddress}}/api/contacts?page=1&size=2
 Accept: application/json
 
-###
+
+### Wyświetlanie osoby - poprawne
 GET {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d
 Accept: application/json
 
-###
+
+### Dodanie osoby - poprawne
 POST {{WebApi_HostAddress}}/api/contacts
 Content-Type: application/json
 
@@ -22,7 +26,8 @@ Content-Type: application/json
   "phone": "+48123456789"
 }
 
-###
+
+### Dodanie osoby - brak email i phone
 POST {{WebApi_HostAddress}}/api/contacts
 Content-Type: application/json
 
@@ -31,8 +36,9 @@ Content-Type: application/json
   "lastName" : "Nowak"
 }
 
-###
-PUT {{WebApi_HostAddress}}/api/contacts/s987b09bd-6ae3-4fed-9e52-6b0dd5be305d
+
+### Update osoby - poprawny
+PUT {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d
 Content-Type: application/json
 
 {
@@ -41,16 +47,34 @@ Content-Type: application/json
   "email" : null,
   "position" : "Intern"
 }
+ 
 
-###
+### Dodanie notatki - poprawne
 POST {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes
 Content-Type: application/json
 
 {
   "content": "New note"
 }
-###
+
+
+### Wyświetlanie notatek - poprawne
 GET {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes
 Content-Type: application/json
 
-###
+
+### Wyświetlanie notatek - błędne id osoby
+GET {{WebApi_HostAddress}}/api/contacts/986b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes
+Content-Type: application/json
+
+
+### Usuwanie notatki - poprawne
+DELETE {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes/e0741102-b179-4dba-a301-a7200d9f2281
+
+
+### Usuwanie notatki - błędne id osoby
+DELETE {{WebApi_HostAddress}}/api/contacts/986b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes/e0741102-b179-4dba-a301-a7200d9f2281
+
+
+### Usuwanie notatki - błędne id notatki
+DELETE {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes/b6505dce-3ff5-446b-a82d-5e1094c3ee1c

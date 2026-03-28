@@ -13,4 +13,5 @@ public interface IPersonService
     Task<bool> DeletePerson(Guid id);
     Task<Note> AddNote(Guid id, CreateNoteDto note);
     Task<PersonDto?> AddTag(Guid id, Tag tag);
+    Task<bool> DeleteNote(Guid personId, Guid noteId);
 }

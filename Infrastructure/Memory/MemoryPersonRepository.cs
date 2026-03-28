@@ -36,4 +36,18 @@ public class MemoryPersonRepository : MemoryGenericRepository<Person>, IPersonRe
         var result = _data.Values.Where(p => p.Organization is not null && p.Organization.Id == organizationId);
         return Task.FromResult(result);
     }
+
+    public Task<bool> DeleteNoteAsync(Guid personId, Guid noteId)
+    {
+        _data.TryGetValue(personId, out  var personEntity);
+        if (personEntity is null)
+            return Task.FromResult(false);
+        
+        var note = personEntity.Notes.FirstOrDefault(n => n.Id == noteId);
+        if (note is null)
+            return Task.FromResult(false);
+        personEntity.Notes.Remove(note);
+        
+        return Task.FromResult(true);
+    }
 }

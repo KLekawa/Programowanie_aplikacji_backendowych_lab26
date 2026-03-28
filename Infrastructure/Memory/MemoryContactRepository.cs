@@ -1,4 +1,5 @@
 ﻿using AppCore.Dto;
+using AppCore.Exceptions;
 using AppCore.Interfaces;
 using AppCore.Models;
 
@@ -76,7 +77,7 @@ public class MemoryContactRepository : MemoryGenericRepository<Contact>, IContac
     public Task<Contact> RemoveTagAsync(Tag tag, Guid contactId)
     {
         if(_data[contactId].Tags.Remove(tag))
-            throw new KeyNotFoundException("Tag not found");
+            throw new ContactNotFoundException($"Osoba o id: {contactId} nie znaleziona");
         return Task.FromResult(_data[contactId]);
     }
 }

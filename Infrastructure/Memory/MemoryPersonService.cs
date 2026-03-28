@@ -1,4 +1,5 @@
 ﻿using AppCore.Dto;
+using AppCore.Exceptions;
 using AppCore.Interfaces;
 using AppCore.Models;
 
@@ -39,7 +40,7 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
         var existingPerson = await unitOfWork.Persons.FindByIdAsync(id);
         
         if(existingPerson == null)
-            return null;
+            throw new ContactNotFoundException($"Osoba o id: {id} nie znaleziona");
         
         person.ApplyTo(existingPerson);
         
@@ -59,7 +60,7 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
         var entity = await unitOfWork.Persons.FindByIdAsync(id);
 
         if (entity is null)
-            throw new Exception("Osoba nie znaleziona");
+            throw new ContactNotFoundException($"Osoba o id: {id} nie znaleziona");
         
         var entityDto = PersonDto.FromEntity(entity);
         return entityDto;
@@ -67,23 +68,16 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
 
     public async Task<bool> DeletePerson(Guid id)
     {
-        try
-        {
             await unitOfWork.Persons.RemoveByIdAsync(id);
             await unitOfWork.SaveChangesAsync();
             return true;
-        }
-        catch (KeyNotFoundException)
-        {
-            return false;
-        }
     }
 
     public async Task<Note> AddNote(Guid id, CreateNoteDto note)
     {
         var existingPerson = await unitOfWork.Persons.FindByIdAsync(id);
         if (existingPerson == null)
-            throw new Exception("Osoba nie znaleziona");
+            throw new ContactNotFoundException($"Osoba o id: {id} nie znaleziona");
 
         if (existingPerson.Notes is null)
         {
@@ -109,11 +103,25 @@ public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
     {
         var existingPerson = await unitOfWork.Persons.FindByIdAsync(id);
         if (existingPerson is null)
-            return null;
+            throw new ContactNotFoundException($"Osoba o id: {id} nie znaleziona");
         
         existingPerson.Tags.Add(tag);
         await unitOfWork.SaveChangesAsync();
         
         return PersonDto.FromEntity(existingPerson);
+    }
+
+    public async Task<bool> DeleteNote(Guid personId, Guid noteId)
+    {
+        var existingPerson = await unitOfWork.Persons.FindByIdAsync(personId);
+        if (existingPerson is null)
+            throw new ContactNotFoundException($"Osoba o id: {personId} nie znaleziona");
+
+        var result = await unitOfWork.Persons.DeleteNoteAsync(personId, noteId);
+        if (!result)
+            throw new NoteNotFoundException($"Notatka o id: {personId} nie znaleziona");
+        
+        await unitOfWork.SaveChangesAsync();
+        return result;
     }
 }
