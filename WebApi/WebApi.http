@@ -49,6 +49,7 @@ Content-Type: application/json
 }
  
 
+
 ### Dodanie notatki - poprawne
 POST {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes
 Content-Type: application/json
@@ -56,7 +57,6 @@ Content-Type: application/json
 {
   "content": "New note"
 }
-
 
 ### Wyświetlanie notatek - poprawne
 GET {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes
@@ -69,7 +69,7 @@ Content-Type: application/json
 
 
 ### Usuwanie notatki - poprawne
-DELETE {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes/e0741102-b179-4dba-a301-a7200d9f2281
+DELETE {{WebApi_HostAddress}}/api/contacts/987b09bd-6ae3-4fed-9e52-6b0dd5be305d/notes/33ac023b-6207-4e8f-b4e3-74aad3abb605
 
 
 ### Usuwanie notatki - błędne id osoby
