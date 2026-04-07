@@ -1,7 +1,10 @@
 using AppCore.Interfaces;
 using AppCore.Module;
+using AppCore.Services;
 using FluentValidation.AspNetCore;
+using Infrastructure.EntityFramework.Context;
 using Infrastructure.Memory;
+using Infrastructure.Module;
 
 namespace WebApi;
 
@@ -12,14 +15,11 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
-
-        builder.Services.AddSingleton<IPersonRepositoryAsync, MemoryPersonRepository>();
-        builder.Services.AddSingleton<ICompanyRepositoryAsync, MemoryCompanyRepository>();
-        builder.Services.AddSingleton<IOrganizationRepositoryAsync, MemoryOrganizationRepository>();
-
-        builder.Services.AddSingleton<IContactUntiOfWork, MemoryContactUnitOfWork>();
         
-        builder.Services.AddSingleton<IPersonService, MemoryPersonService>();
+        builder.Services.AddContactsEfModule(builder.Configuration);
+        // builder.Services.AddContactsCoreModule(builder.Configuration);
+
+        
         // Add services to the container.
         builder.Services.AddAuthorization();
         builder.Services.AddContactsModule(builder.Configuration);

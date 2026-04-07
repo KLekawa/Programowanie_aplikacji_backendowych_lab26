@@ -26,7 +26,7 @@ public class CrmUser : IdentityUser, ISystemUser
         if (Status == SystemUserStatus.Active)
         {
             Status = SystemUserStatus.Inactive;
-            DeactivatedAt = DateTime.Now;            
+            DeactivatedAt = now;      
         }
     }
 }

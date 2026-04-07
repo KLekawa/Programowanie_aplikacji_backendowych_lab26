@@ -3,9 +3,9 @@ using AppCore.Exceptions;
 using AppCore.Interfaces;
 using AppCore.Models;
 
-namespace Infrastructure.Memory;
+namespace AppCore.Services;
 
-public class MemoryPersonService(IContactUntiOfWork unitOfWork) : IPersonService
+public class PersonService(IContactUntiOfWork unitOfWork) : IPersonService
 {
     public async Task<PagedResult<PersonDto>> FindAllPeoplePaged(int page, int size)
     {

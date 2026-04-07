@@ -1,6 +1,7 @@
 using AppCore.Interfaces;
 using AppCore.Models;
 using Infrastructure.EntityFramework.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +13,10 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
     public DbSet<Company> Companies { get; set; }
     public DbSet<Organization> Organizations { get; set; }
     
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite("data source=D:\\data\\contacts.db");
-    }
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     optionsBuilder.UseSqlite("Data Source=..\\Infrastructure\\contacts.db");
+    // }
 
     public ContactsDbContext()
     {
@@ -36,26 +37,82 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
             entity.HasIndex(u => u.Email).IsUnique();
         });
 
-        builder.Entity<CrmUser>(entity =>
+        var user1 = new CrmUser
         {
-            entity.HasData(
-                new
-                {
-                    FirstName = "Michał",
-                    LastName = "Nowak",
-                    FullName = "Michał Alojzy Nowak",
-                    Email = "nowak@mail.com",
-                    Department = "Sprawiedliwości",
-                    Status = SystemUserStatus.Active,
-                    CreatedAt = DateTime.Now,
-                    LastLoginAt = DateTime.Now,
-                });
-        });
+            Id = "a72c4b08-d477-4e10-960c-743b8174ba93",
+            FirstName = "Adam",
+            LastName = "Kowalski",
+            FullName = "Adam Michał Kowalski",
+            Email = "adam@wsei.edu.pl",
+            Department = "Sprzedaż",
+            Status = SystemUserStatus.Active,
+            CreatedAt = new DateTime(2026, 4, 2, 10, 0 ,0),
+            UserName = "Adam",
+            NormalizedUserName = "ADAM",
+            EmailConfirmed = true,
+            NormalizedEmail = "ADAM@WSEI.EDU.PL",
+            SecurityStamp = "11111111-aaaa-bbbb-cccc-111111111111"
+        };
+        
+        var user2 = new CrmUser
+        {
+            Id = "490e4c79-6737-4431-bfaa-26e478489bc3",
+            FirstName = "Ewa",
+            LastName = "Nowak",
+            FullName = "Ewa Julia Nowak",
+            Email = "ewa@wsei.edu.pl",
+            Department = "Sprawy wewnętrzne",
+            Status = SystemUserStatus.Active,
+            CreatedAt = new DateTime(2026, 4, 3, 18, 24 ,42),
+            UserName = "Ewa",
+            NormalizedUserName = "EWA",
+            EmailConfirmed = true,
+            NormalizedEmail = "EWA@WSEI.EDU.PL",
+            SecurityStamp = "22222222-aaaa-bbbb-cccc-222222222222"
+        };
+        
+        
+        PasswordHasher<CrmUser> passwordHasher = new PasswordHasher<CrmUser>();
+        user1.PasswordHash = passwordHasher.HashPassword(user1, "user1Haslo");
+        user2.PasswordHash = passwordHasher.HashPassword(user2, "user2Haslo");
+        
+        builder.Entity<CrmUser>().HasData(user1, user2);
 
         builder.Entity<CrmRole>(entity =>
         {
             entity.Property(r => r.Name).HasMaxLength(20);
         });
+
+        builder.Entity<CrmRole>().HasData(
+            new CrmRole
+            {
+                Id = "0f6c6e4a-8a44-4c39-b4dd-111111111111",
+                Name = UserRole.Administrator.ToString(),
+                NormalizedName = UserRole.Administrator.ToString().ToUpper(),
+                Description = "Administrator systemu"
+            },
+            new CrmRole
+            {
+                Id = "0f6c6e4a-8a44-4c39-b4dd-222222222222",
+                Name = UserRole.SupportAgent.ToString(),
+                NormalizedName = UserRole.SupportAgent.ToString().ToUpper(),
+                Description = "Support Agent"
+                
+            }
+        );
+
+        builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                UserId = "a72c4b08-d477-4e10-960c-743b8174ba93",
+                RoleId = "0f6c6e4a-8a44-4c39-b4dd-111111111111"
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = "490e4c79-6737-4431-bfaa-26e478489bc3",
+                RoleId = "0f6c6e4a-8a44-4c39-b4dd-222222222222"
+            }
+        );
         
         // Konfiguracji mapowania dziedziczenia TPH
         // Jedna tabela do przechowywnia wszystkich typów kontaktów
@@ -69,15 +126,18 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
         {
             entity.Property(p => p.Email).HasMaxLength(200);
             entity.Property(p => p.Phone).HasMaxLength(20);
-            // dodoj ograniczenia dla pozostałych właściwości 
+            entity.Property(p => p.Status).HasConversion<string>();
         });
         
         builder.Entity<Person>(entity =>
         {
             entity.Property(p => p.BirthDate).HasColumnType("date");
             entity.Property(p => p.Gender).HasConversion<string>();
-            entity.Property(p => p.Status).HasConversion<string>();
-            // dodaj ograniczenia dla pozostałych właściwości
+            // entity.Property(p => p.Status).HasConversion<string>();
+            entity.Property(p => p.FirstName).HasMaxLength(100);
+            entity.Property(p => p.LastName).HasMaxLength(200);
+            entity.Property(p => p.MiddleName).HasMaxLength(100);
+            entity.Property(p => p.Position).HasMaxLength(100);
         });
         
         // definicja związku
@@ -155,5 +215,8 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
         builder.Entity<Contact>()
             .OwnsOne(c => c.Address)
             .HasData(address);
+        
+        //Konfiguracja Notes i Tags???
+        
     }
 }

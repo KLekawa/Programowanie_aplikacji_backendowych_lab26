@@ -7,7 +7,7 @@ namespace WebApi.Controller;
 
 [ApiController]
 [Route("api/contacts")]
-public class ContactConrtoller(IPersonService service) : ControllerBase
+public class ContactController(IPersonService service) : ControllerBase
 {
     public async Task<IActionResult> GetAllPersons(int page, int size)
     {

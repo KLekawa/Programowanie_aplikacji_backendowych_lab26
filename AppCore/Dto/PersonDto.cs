@@ -14,6 +14,7 @@ public record PersonDto : ContactBaseDto
 
     public static PersonDto FromEntity(Person person) => new()
     {
+        Id = person.Id,
         FirstName = person.FirstName,
         LastName = person.LastName,
         Position = person.Position,
