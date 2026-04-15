@@ -5,6 +5,7 @@ using FluentValidation.AspNetCore;
 using Infrastructure.EntityFramework.Context;
 using Infrastructure.Memory;
 using Infrastructure.Module;
+using Infrastructure.Security;
 
 namespace WebApi;
 
@@ -24,6 +25,9 @@ public class Program
         builder.Services.AddAuthorization();
         builder.Services.AddContactsModule(builder.Configuration);
         builder.Services.AddControllers();
+        
+        builder.Services.AddSingleton<JwtSettings>();
+        builder.Services.AddJwt(new JwtSettings(builder.Configuration));
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();

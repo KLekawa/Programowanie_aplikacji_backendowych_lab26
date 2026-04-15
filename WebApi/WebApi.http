@@ -6,7 +6,7 @@ Accept: application/json
 
 
 ### Wyświetlanie kontaków - poprawne
-GET {{WebApi_HostAddress}}/api/contacts?page=1&size=3
+GET {{WebApi_HostAddress}}/api/contacts?page=1&size=4
 Accept: application/json
 
 
@@ -20,9 +20,9 @@ POST {{WebApi_HostAddress}}/api/contacts
 Content-Type: application/json
 
 {
-  "firstName": "Adam",
-  "lastName" : "Nowak",
-  "Email": "adam@wsei.edu.pl",
+  "firstName": "Grzegorz",
+  "lastName" : "Nowinski",
+  "Email": "grzegorz@wsei.edu.pl",
   "phone": "+48123456789"
 }
 
