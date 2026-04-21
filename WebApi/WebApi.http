@@ -78,3 +78,24 @@ DELETE {{WebApi_HostAddress}}/api/contacts/adc15ac2-7e05-47c4-9049-c6c89e7b8f9c/
 
 ### Usuwanie notatki - błędne id notatki
 DELETE {{WebApi_HostAddress}}/api/contacts/adc15ac1-7e05-47c4-9049-c6c89e7b8f9c/notes/b6505dce-3ff5-446b-a82d-5e1094c3ee1c
+
+
+### Logowanie do kontrolera Auth - poprawne
+POST {{WebApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+   "email": "jan.kowalski@crm.pl",
+    "password": "Manager@123!"
+}
+
+
+### Zapytanie z tokenem - poprawne
+GET {{WebApi_HostAddress}}/api/contacts?page=1&size=5
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImE3MmM0YjA4LWQ0NzctNGUxMC05NjBjLTc0M2I4MTc0YmE5MyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBjcm0ucGwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9naXZlbm5hbWUiOiJKYW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zdXJuYW1lIjoiS293YWxza2kiLCJkZXBhcnRtZW50IjoiU3ByemVkYcW8IiwianRpIjoiZDAxZDhjZDItZTIyNS00NzQ1LTgyMzEtOGQ2MWZmMDRhNWVmIiwiaWF0IjoiMTc3Njc4NjU5MCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJuYmYiOjE3NzY3ODY1OTAsImV4cCI6MTc3Njc5MDE5MCwiaXNzIjoiSWRlaXNDcm1BcGkiLCJhdWQiOiJDcm1DbGllbnQifQ.qTARJ3anK80f8PV2w_jKUpsWcEed3vXzbeC9eekLfWU
+
+
+### Zapytanie bez tokenu - błedne
+GET {{WebApi_HostAddress}}/api/contacts
+Accept: application/json

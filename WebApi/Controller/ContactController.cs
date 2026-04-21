@@ -1,6 +1,8 @@
-﻿using AppCore.Dto;
+﻿using AppCore.Authorization;
+using AppCore.Dto;
 using AppCore.Interfaces;
 using AppCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controller;
@@ -9,6 +11,8 @@ namespace WebApi.Controller;
 [Route("api/contacts")]
 public class ContactController(IPersonService service) : ControllerBase
 {
+    [HttpGet("")]
+    [Authorize(Policy = nameof(CrmPolicies.ReadOnlyAccess))]
     public async Task<IActionResult> GetAllPersons(int page, int size)
     {
         return Ok(await service.FindAllPeoplePaged(page, size));

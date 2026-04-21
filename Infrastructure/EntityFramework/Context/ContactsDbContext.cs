@@ -42,17 +42,17 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
         var user1 = new CrmUser
         {
             Id = "a72c4b08-d477-4e10-960c-743b8174ba93",
-            FirstName = "Adam",
+            FirstName = "Jan",
             LastName = "Kowalski",
-            FullName = "Adam Michał Kowalski",
-            Email = "adam@wsei.edu.pl",
+            FullName = "Jan Michał Kowalski",
+            Email = "jan.kowalski@crm.pl",
             Department = "Sprzedaż",
             Status = SystemUserStatus.Active,
             CreatedAt = new DateTime(2026, 4, 2, 10, 0 ,0),
-            UserName = "Adam",
-            NormalizedUserName = "ADAM",
+            UserName = "jan.kowalski@crm.pl",
+            NormalizedUserName = "JAN.KOWALSKI@CRM.PL",
             EmailConfirmed = true,
-            NormalizedEmail = "ADAM@WSEI.EDU.PL",
+            NormalizedEmail = "JAN.KOWALSKI@CRM.PL",
             SecurityStamp = "11111111-aaaa-bbbb-cccc-111111111111"
         };
         
@@ -75,7 +75,7 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
         
         
         PasswordHasher<CrmUser> passwordHasher = new PasswordHasher<CrmUser>();
-        user1.PasswordHash = passwordHasher.HashPassword(user1, "user1Haslo");
+        user1.PasswordHash = passwordHasher.HashPassword(user1, "Manager@123!");
         user2.PasswordHash = passwordHasher.HashPassword(user2, "user2Haslo");
         
         builder.Entity<CrmUser>().HasData(user1, user2);

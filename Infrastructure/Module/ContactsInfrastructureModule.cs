@@ -6,6 +6,7 @@ using Infrastructure.EntityFramework.Entities;
 using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.UnitOfWork;
 using Infrastructure.Security;
+using Infrastructure.Seeders;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,8 @@ public static class ContactsInfrastructureModule
         services.AddScoped<IContactRepositoryAsync, EfContactRepository>();
         services.AddScoped<IOrganizationRepositoryAsync, EfOrganizationRepository>();
         services.AddScoped<IContactUntiOfWork, EfContactsUnitOfWork>();
+        // services.AddScoped<IDataSeeder, IdentityDbSeeder>();
+        services.AddScoped<IDataSeeder, PersonDbSeeder>();
         services.AddDbContext<ContactsDbContext>(options =>
             options.UseSqlite(
                 configuration.GetConnectionString("CrmDb")));
