@@ -6,7 +6,7 @@ public abstract class Interaction : EntityBase
     public Contact Contact { get; set; }
 
     public DateTime Date { get; set; }
-    public string Content { get; set; } = string.Empty;
+    public string Content { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
@@ -14,17 +14,17 @@ public abstract class Interaction : EntityBase
 
 public class SmsInteraction : Interaction
 {
-    public string PhoneNumber { get; set; } = string.Empty;
+    public string PhoneNumber { get; set; }
 }
 
 public class EmailInteraction : Interaction
 {
-    public string EmailAddress { get; set; } = string.Empty;
-    public string Subject { get; set; } = string.Empty;
+    public string EmailAddress { get; set; }
+    public string Subject { get; set; }
 }
 
 public class MeetingInteraction : Interaction
 {
-    public string Location { get; set; } = string.Empty;
+    public string Location { get; set; } 
     public int DurationMinutes { get; set; }
 }
