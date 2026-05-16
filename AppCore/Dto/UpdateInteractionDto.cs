@@ -15,7 +15,7 @@ public class UpdateInteractionDto
     public string? Location { get; set; }
     public int? DurationMinutes { get; set; }
 
-    public Interaction ToEntity(Interaction interaction)
+    public void ApplyTo(Interaction interaction)
     {
         if (Date is not null)
             interaction.Date = Date.Value;
@@ -23,23 +23,28 @@ public class UpdateInteractionDto
         if (Content is not null)
             interaction.Content = Content;
 
-        if (PhoneNumber is not null)
-            interaction.PhoneNumber = PhoneNumber;
+        if (interaction is SmsInteraction sms)
+        {
+            if (PhoneNumber is not null)
+                sms.PhoneNumber = PhoneNumber;
+        }
 
-        if (EmailAddress is not null)
-            interaction.EmailAddress = EmailAddress;
+        if (interaction is EmailInteraction email)
+        {
+            if (EmailAddress is not null)
+                email.EmailAddress = EmailAddress;
 
-        if (Subject is not null)
-            interaction.Subject = Subject;
+            if (Subject is not null)
+                email.Subject = Subject;
+        }
 
-        if (Location is not null)
-            interaction.Location = Location;
+        if (interaction is MeetingInteraction meeting)
+        {
+            if (Location is not null)
+                meeting.Location = Location;
 
-        if (DurationMinutes is not null)
-            interaction.DurationMinutes = DurationMinutes.Value;
-
-        interaction.UpdatedAt = DateTime.UtcNow;
-
-        return interaction;
+            if (DurationMinutes is not null)
+                meeting.DurationMinutes = DurationMinutes.Value;
+        }
     }
 }

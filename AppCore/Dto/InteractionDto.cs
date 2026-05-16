@@ -7,38 +7,54 @@ public class InteractionDto
     public Guid Id { get; set; }
     public Guid ContactId { get; set; }
 
-    public InteractionType Type { get; set; }
-
+    public string Type { get; set; } = string.Empty;
     public DateTime Date { get; set; }
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 
-    public string? PhoneNumber { get; set; }
-
-    public string? EmailAddress { get; set; }
-    public string? Subject { get; set; }
-
-    public string? Location { get; set; }
-    public int? DurationMinutes { get; set; }
-
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+    public string Details { get; set; } = string.Empty;
 
     public static InteractionDto FromEntity(Interaction interaction)
     {
-        return new InteractionDto
+        return interaction switch
         {
-            Id = interaction.Id,
-            ContactId = interaction.ContactId,
-            Type = interaction.Type,
-            Date = interaction.Date,
-            Content = interaction.Content,
-            PhoneNumber = interaction.PhoneNumber,
-            EmailAddress = interaction.EmailAddress,
-            Subject = interaction.Subject,
-            Location = interaction.Location,
-            DurationMinutes = interaction.DurationMinutes,
-            CreatedAt = interaction.CreatedAt,
-            UpdatedAt = interaction.UpdatedAt
+            SmsInteraction sms => new InteractionDto
+            {
+                Id = sms.Id,
+                ContactId = sms.ContactId,
+                Type = "Sms",
+                Date = sms.Date,
+                Content = sms.Content,
+                Details = sms.PhoneNumber
+            },
+
+            EmailInteraction email => new InteractionDto
+            {
+                Id = email.Id,
+                ContactId = email.ContactId,
+                Type = "Email",
+                Date = email.Date,
+                Content = email.Content,
+                Details = $"{email.EmailAddress}, {email.Subject}"
+            },
+
+            MeetingInteraction meeting => new InteractionDto
+            {
+                Id = meeting.Id,
+                ContactId = meeting.ContactId,
+                Type = "Meeting",
+                Date = meeting.Date,
+                Content = meeting.Content,
+                Details = $"{meeting.Location}, {meeting.DurationMinutes} min"
+            },
+
+            _ => new InteractionDto
+            {
+                Id = interaction.Id,
+                ContactId = interaction.ContactId,
+                Type = "Unknown",
+                Date = interaction.Date,
+                Content = interaction.Content
+            }
         };
     }
 }
