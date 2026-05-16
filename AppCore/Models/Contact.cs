@@ -1,3 +1,4 @@
+
 namespace AppCore.Models;
 
 public abstract class Contact : EntityBase
