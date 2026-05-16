@@ -5,9 +5,9 @@ namespace AppCore.Dto;
 public class CreateSmsDto
 {
     public DateTime Date { get; set; }
-    public string Content { get; set; } = string.Empty;
+    public string Content { get; set; }
 
-    public string PhoneNumber { get; set; } = string.Empty;
+    public string PhoneNumber { get; set; }
 
     public Interaction ToEntity(Guid contactId)
     {

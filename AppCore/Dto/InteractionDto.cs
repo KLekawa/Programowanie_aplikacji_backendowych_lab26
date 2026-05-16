@@ -10,7 +10,7 @@ public class InteractionDto
     public InteractionType Type { get; set; }
 
     public DateTime Date { get; set; }
-    public string Content { get; set; } = string.Empty;
+    public string Content { get; set; }
 
     public string? PhoneNumber { get; set; }
 

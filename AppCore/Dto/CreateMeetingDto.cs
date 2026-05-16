@@ -5,9 +5,9 @@ namespace AppCore.Dto;
 public class CreateMeetingDto
 {
     public DateTime Date { get; set; }
-    public string Content { get; set; } = string.Empty;
+    public string Content { get; set; }
 
-    public string Location { get; set; } = string.Empty;
+    public string Location { get; set; }
     public int DurationMinutes { get; set; }
 
     public Interaction ToEntity(Guid contactId)
