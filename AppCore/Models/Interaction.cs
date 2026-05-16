@@ -28,3 +28,9 @@ public class MeetingInteraction : Interaction
     public string Location { get; set; } 
     public int DurationMinutes { get; set; }
 }
+public enum InteractionType
+{
+    Sms,
+    Email,
+    Meeting
+}
