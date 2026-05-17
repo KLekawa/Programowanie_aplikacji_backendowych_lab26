@@ -164,3 +164,25 @@ Content-Type: application/json
 ### Wyświetlanie interakcji - nierpawdiłowe id osoby
 GET {{WebApi_HostAddress}}/api/interactions/contacts/adc25ac1-7e05-47c4-9049-c6c89e7b8f9c
 Accept: application/json
+
+### Wyświetlanie wszystkich interakcji stronicowane - poprawne
+GET {{WebApi_HostAddress}}/api/interactions?page=1&size=4
+Accept: application/json
+
+
+### Wyświetlanie interakcji po id - błędne id
+GET {{WebApi_HostAddress}}/api/interactions/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+
+### Update interakcji - błędne id
+PUT {{WebApi_HostAddress}}/api/interactions/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "content": "Próba aktualizacji nieistniejącej interakcji"
+}
+
+
+### Usuwanie interakcji - błędne id interakcji
+DELETE {{WebApi_HostAddress}}/api/interactions/contacts/adc15ac1-7e05-47c4-9049-c6c89e7b8f9c/00000000-0000-0000-0000-000000000000
