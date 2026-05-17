@@ -5,7 +5,8 @@ namespace Infrastructure.Memory;
 public class MemoryContactUnitOfWork(
     IPersonRepositoryAsync persons,
     ICompanyRepositoryAsync companies,
-    IOrganizationRepositoryAsync organizations
+    IOrganizationRepositoryAsync organizations,
+    IInteractionRepositoryAsync interactions
 ) : IContactUntiOfWork
 {   
     public ValueTask DisposeAsync()
@@ -16,6 +17,7 @@ public class MemoryContactUnitOfWork(
     public IPersonRepositoryAsync Persons => persons;
     public ICompanyRepositoryAsync Companies => companies;
     public IOrganizationRepositoryAsync Organizations => organizations;
+    public IInteractionRepositoryAsync Interactions => interactions;
 
     public Task<int> SaveChangesAsync()
     {

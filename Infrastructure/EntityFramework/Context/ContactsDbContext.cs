@@ -13,8 +13,9 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
     public DbSet<Person> People { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Organization> Organizations { get; set; }
+    public DbSet<Interaction> Interactions { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source=..\\Infrastructure\\contacts.db");
@@ -124,6 +125,36 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
             .HasValue<Company>("Company")
             .HasValue<Organization>("Organization");
 
+        builder.Entity<Interaction>()
+            .HasDiscriminator<string>("Discriminator")
+            .HasValue<EmailInteraction>("Email")
+            .HasValue<SmsInteraction>("Sms")
+            .HasValue<MeetingInteraction>("Meeting");
+        
+        builder.Entity<Interaction>()
+            .Property(i => i.Type)
+            .HasConversion<string>();
+
+        builder.Entity<Interaction>(entity =>
+        {
+            entity.Property(i => i.Content).HasMaxLength(5000);
+        });
+
+        builder.Entity<SmsInteraction>(entity =>
+        {
+            entity.Property(i => i.PhoneNumber).HasMaxLength(20);
+        });
+        builder.Entity<EmailInteraction>(entity =>
+        {
+            entity.Property(i => i.EmailAddress).HasMaxLength(200);
+            entity.Property(i => i.Subject).HasMaxLength(120);
+        });
+        builder.Entity<MeetingInteraction>(entity =>
+        {
+            entity.Property(i => i.Location).HasMaxLength(200);
+        });
+        
+            
         builder.Entity<Contact>(entity =>
         {
             entity.Property(p => p.Email).HasMaxLength(200);
@@ -179,6 +210,7 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
             // id osoby, która dodana jest niżej
             ContactId = Guid.Parse("3d54091d-abc8-49ec-9590-93ad3ed5458f")
         };
+
         
         // przykładowe kontakty typu Person
         builder.Entity<Person>(entity =>
@@ -217,6 +249,12 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
         builder.Entity<Contact>()
             .OwnsOne(c => c.Address)
             .HasData(address);
+        
+        builder.Entity<Contact>()
+            .HasMany(c => c.Interactions)
+            .WithOne(i => i.Contact)
+            .HasForeignKey(i => i.ContactId);
+        
         
         //Konfiguracja Notes i Tags???
         

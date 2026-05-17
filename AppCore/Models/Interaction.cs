@@ -7,6 +7,7 @@ public abstract class Interaction : EntityBase
 
     public DateTime Date { get; set; }
     public string Content { get; set; }
+    public InteractionType Type { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

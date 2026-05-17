@@ -10,7 +10,8 @@ public class ProblemDetailsExceptionHandler(ProblemDetailsFactory factory, ILogg
     {
         if (exception is ContactNotFoundException 
             || exception is KeyNotFoundException 
-            || exception is NoteNotFoundException)
+            || exception is NoteNotFoundException
+            || exception is InteractionNotFoundException)
         {
             logger.Log(LogLevel.Information, $"Exception '{exception.Message}' handled!");
             var problem = factory.CreateProblemDetails(

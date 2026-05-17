@@ -7,6 +7,7 @@ public class EfContactsUnitOfWork(
     IPersonRepositoryAsync personRepository,
     ICompanyRepositoryAsync companyRepository,
     IOrganizationRepositoryAsync organizationRepository,
+    IInteractionRepositoryAsync interactionRepository,
     ContactsDbContext context
     ) : IContactUntiOfWork
 {
@@ -19,6 +20,7 @@ public class EfContactsUnitOfWork(
     public IPersonRepositoryAsync Persons => personRepository;
     public ICompanyRepositoryAsync Companies => companyRepository;
     public IOrganizationRepositoryAsync Organizations => organizationRepository;
+    public IInteractionRepositoryAsync Interactions => interactionRepository;
     public Task<int> SaveChangesAsync()
     {
         return context.SaveChangesAsync();
