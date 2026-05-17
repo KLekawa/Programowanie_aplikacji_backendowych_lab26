@@ -28,9 +28,11 @@ public static class ContactsInfrastructureModule
         services.AddScoped<IPersonRepositoryAsync, EfPersonRepository>();
         services.AddScoped<IContactRepositoryAsync, EfContactRepository>();
         services.AddScoped<IOrganizationRepositoryAsync, EfOrganizationRepository>();
+        services.AddScoped<IInteractionRepositoryAsync, EfInteractionRepository>();
         services.AddScoped<IContactUntiOfWork, EfContactsUnitOfWork>();
         // services.AddScoped<IDataSeeder, IdentityDbSeeder>();
         services.AddScoped<IDataSeeder, PersonDbSeeder>();
+        services.AddScoped<IDataSeeder, InteractionDbSeeder>();
         services.AddDbContext<ContactsDbContext>(options =>
             options.UseSqlite(
                 configuration.GetConnectionString("CrmDb")));
@@ -50,6 +52,7 @@ public static class ContactsInfrastructureModule
             .AddEntityFrameworkStores<ContactsDbContext>()
             .AddDefaultTokenProviders();
         services.AddScoped<IPersonService, PersonService>();
+        services.AddScoped<IInteractionService, InteractionService>();
         return services;
     }
     
