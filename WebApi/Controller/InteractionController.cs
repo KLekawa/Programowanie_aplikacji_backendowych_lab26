@@ -1,12 +1,15 @@
-﻿using AppCore.Dto;
+﻿using AppCore.Authorization;
+using AppCore.Dto;
 using AppCore.Interfaces;
 using AppCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controller;
 
 [ApiController]
 [Route("api/interactions")]
+[Authorize(Policy = nameof(CrmPolicies.ReadOnlyAccess))]
 public class InteractionController(IInteractionService service) : ControllerBase
 {
     [HttpGet("")]
