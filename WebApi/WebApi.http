@@ -99,3 +99,68 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hc
 ### Zapytanie bez tokenu - błedne
 GET {{WebApi_HostAddress}}/api/contacts
 Accept: application/json
+
+### Dodanie interakcji email - poprawne
+POST {{WebApi_HostAddress}}/api/interactions/contacts/adc15ac1-7e05-47c4-9049-c6c89e7b8f9c/email
+Content-Type: application/json
+
+{
+  "date": "2026-05-17T14:00:00",
+  "content": "Wysłano ofertę do klienta",
+  "emailAddress": "klient@test.pl",
+  "subject": "Oferta współpracy"
+}
+
+
+### Dodanie sms - poprawne
+POST {{WebApi_HostAddress}}/api/interactions/contacts/adc15ac1-7e05-47c4-9049-c6c89e7b8f9c/sms
+Content-Type: application/json
+
+{
+  "date": "2026-05-17T15:00:00",
+  "content": "Wysłano SMS z przypomnieniem",
+  "phoneNumber": "+48123456789"
+}
+
+
+### Dodanie spotkania - poprawne
+POST {{WebApi_HostAddress}}/api/interactions/contacts/adc15ac1-7e05-47c4-9049-c6c89e7b8f9c/meeting
+Content-Type: application/json
+
+{
+  "date": "2026-05-18T10:00:00",
+  "content": "Spotkanie z klientem",
+  "location": "Kraków",
+  "durationMinutes": 60
+}
+
+
+### Wyświetlanie interakcji klienta - poprawne
+GET {{WebApi_HostAddress}}/api/interactions/contacts/adc15ac1-7e05-47c4-9049-c6c89e7b8f9c
+Accept: application/json
+
+
+### Wyświetlanie interakcji po zakresie dat - poprawne
+GET {{WebApi_HostAddress}}/api/interactions/contacts/adc15ac1-7e05-47c4-9049-c6c89e7b8f9c/dates?from=2026-05-01&to=2026-05-31
+Accept: application/json
+
+
+### Wyświetlanie interakcji po typie - poprawne
+GET {{WebApi_HostAddress}}/api/interactions/contacts/adc15ac1-7e05-47c4-9049-c6c89e7b8f9c/type/Email
+Accept: application/json
+
+
+### Dodanie interakcji sms - nieprawidłowe id
+POST {{WebApi_HostAddress}}/api/interactions/contacts/adc25ac1-7e05-47c4-9049-c6c89e7b8f9c/sms
+Content-Type: application/json
+
+{
+  "date": "2026-05-17T15:00:00",
+  "content": "Test blednego id",
+  "phoneNumber": "+48123456789"
+}
+
+
+### Wyświetlanie interakcji - nierpawdiłowe id osoby
+GET {{WebApi_HostAddress}}/api/interactions/contacts/adc25ac1-7e05-47c4-9049-c6c89e7b8f9c
+Accept: application/json
