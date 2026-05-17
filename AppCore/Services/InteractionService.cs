@@ -154,6 +154,7 @@ public class InteractionService(IContactUntiOfWork unitOfWork) : IInteractionSer
             throw new InteractionNotFoundException($"Interackja o id: {id} nie znaleziona");
         
         updateInteractionDto.ApplyTo(interaction);
+        interaction.UpdatedAt = DateTime.UtcNow;
 
         await unitOfWork.SaveChangesAsync();
         return InteractionDto.FromEntity(interaction);
