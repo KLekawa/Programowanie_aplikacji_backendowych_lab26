@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using AppCore.Interfaces;
 using AppCore.Module;
 using AppCore.Services;
@@ -15,7 +17,12 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            });
         
         builder.Services.AddContactsEfModule(builder.Configuration);
         // builder.Services.AddContactsCoreModule(builder.Configuration);

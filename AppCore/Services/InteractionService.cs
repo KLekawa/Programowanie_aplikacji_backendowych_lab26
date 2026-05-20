@@ -9,27 +9,18 @@ public class InteractionService(IContactUntiOfWork unitOfWork) : IInteractionSer
 {
     public async Task<InteractionDto> AddEmailAsync(Guid contactId, CreateEmailDto createEmailDto)
     {
-        
         var person = await unitOfWork.Persons.FindByIdAsync(contactId);
         if(person == null)
             throw new ContactNotFoundException($"Osoba o id: {contactId} nie znaleziona");
-
+        
+        var newInteraction = createEmailDto.ToEntity(contactId);
+        newInteraction.Id = Guid.NewGuid();
+        newInteraction.CreatedAt = DateTime.Now;
+        
         if (person.Interactions is null)
             person.Interactions = new List<Interaction>();
-
-        var newInteraction = new EmailInteraction()
-        {
-            Id = Guid.NewGuid(),
-            ContactId = contactId,
-            Date = createEmailDto.Date,
-            Content = createEmailDto.Content,
-            EmailAddress =  createEmailDto.EmailAddress,
-            Subject = createEmailDto.Subject,
-            CreatedAt = DateTime.Now,
-            
-        };
-        person.Interactions.Add(newInteraction);
-        await unitOfWork.Persons.UpdateAsync(person);
+        
+        await unitOfWork.Interactions.AddAsync(newInteraction);
         await unitOfWork.SaveChangesAsync();
 
         return InteractionDto.FromEntity(newInteraction);
@@ -41,21 +32,14 @@ public class InteractionService(IContactUntiOfWork unitOfWork) : IInteractionSer
         if(person == null)
             throw new ContactNotFoundException($"Osoba o id: {contactId} nie znaleziona");
 
+        var newInteraction = createSmsDto.ToEntity(contactId);
+        newInteraction.Id = Guid.NewGuid();
+        newInteraction.CreatedAt = DateTime.Now;
+        
         if (person.Interactions is null)
             person.Interactions = new List<Interaction>();
-
-        var newInteraction = new SmsInteraction()
-        {
-            Id = Guid.NewGuid(),
-            ContactId = contactId,
-            Date = createSmsDto.Date,
-            Content = createSmsDto.Content,
-            PhoneNumber = createSmsDto.PhoneNumber,
-            CreatedAt = DateTime.Now,
-            
-        };
-        person.Interactions.Add(newInteraction);
-        await unitOfWork.Persons.UpdateAsync(person);
+        
+        await unitOfWork.Interactions.AddAsync(newInteraction);
         await unitOfWork.SaveChangesAsync();
 
         return InteractionDto.FromEntity(newInteraction);
@@ -67,22 +51,14 @@ public class InteractionService(IContactUntiOfWork unitOfWork) : IInteractionSer
         if(person == null)
             throw new ContactNotFoundException($"Osoba o id: {contactId} nie znaleziona");
 
+        var newInteraction = createMeetingDto.ToEntity(contactId);
+        newInteraction.Id = Guid.NewGuid();
+        newInteraction.CreatedAt = DateTime.Now;
+        
         if (person.Interactions is null)
             person.Interactions = new List<Interaction>();
-
-        var newInteraction = new MeetingInteraction()
-        {
-            Id = Guid.NewGuid(),
-            ContactId = contactId,
-            Date = createMeetingDto.Date,
-            Content = createMeetingDto.Content,
-            Location = createMeetingDto.Location,
-            DurationMinutes =  createMeetingDto.DurationMinutes,
-            CreatedAt = DateTime.Now,
-            
-        };
-        person.Interactions.Add(newInteraction);
-        await unitOfWork.Persons.UpdateAsync(person);
+        
+        await unitOfWork.Interactions.AddAsync(newInteraction);
         await unitOfWork.SaveChangesAsync();
 
         return InteractionDto.FromEntity(newInteraction);
@@ -93,13 +69,15 @@ public class InteractionService(IContactUntiOfWork unitOfWork) : IInteractionSer
         var person = await unitOfWork.Persons.FindByIdAsync(contactId);
         if(person == null)
             throw new ContactNotFoundException($"Osoba o id: {contactId} nie znaleziona");
-
-        var result = person.Interactions.Remove(person.Interactions.First(i => i.Id == interactionId));
-        if(!result)
-            throw new InteractionNotFoundException($"Interackja o id: {interactionId} nie znaleziona");
+        
+        var interaction = await unitOfWork.Interactions.FindByIdAsync(interactionId);
+        if(interaction is null || interaction.ContactId != contactId)
+            throw new InteractionNotFoundException($"Interackja o id: {interactionId} nie znaleziona lub nie należy do tego kontaktu");
+        
+        await unitOfWork.Interactions.RemoveByIdAsync(interactionId);
 
         await unitOfWork.SaveChangesAsync();
-        return result;
+        return true;
     }
 
     public async Task<InteractionDto> GetByIdAsync(Guid interactionId)
@@ -133,7 +111,7 @@ public class InteractionService(IContactUntiOfWork unitOfWork) : IInteractionSer
     {
         var interactions = await unitOfWork.Interactions.GetByTypeAsync(contactId, type);
         if(!interactions.Any())
-            throw new InteractionNotFoundException($"Nie znaleziono żadnych interakcji");
+            throw new InteractionNotFoundException($"Nie znaleziono żadnych interakcji typu {type} dla kontaktu {contactId}");
         
         return interactions.Select(InteractionDto.FromEntity).ToList();
     }
