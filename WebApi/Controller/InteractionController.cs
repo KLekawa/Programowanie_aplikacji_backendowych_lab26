@@ -62,9 +62,14 @@ public class InteractionController(IInteractionService service) : ControllerBase
     }
 
     [HttpGet("contacts/{contactId:guid}/type/{type}")]
-    public async Task<IActionResult> GetByType(Guid contactId, InteractionType type)
+    public async Task<IActionResult> GetByType(Guid contactId, string type)
     {
-        return Ok(await service.GetByTypeAsync(contactId, type));
+        if (!Enum.TryParse<InteractionType>(type, true, out var interactionType))
+        {
+            return BadRequest("Nieprawidłowy typ interakcji. Dozwolone wartości: Sms, Email, Meeting");
+        }
+
+        return Ok(await service.GetByTypeAsync(contactId, interactionType));
     }
 
     [HttpPut("{id:guid}")]
