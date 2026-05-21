@@ -126,10 +126,10 @@ public class ContactsDbContext : IdentityDbContext<CrmUser, CrmRole, string>
             .HasValue<Organization>("Organization");
 
         builder.Entity<Interaction>()
-            .HasDiscriminator<string>("Discriminator")
-            .HasValue<EmailInteraction>("Email")
-            .HasValue<SmsInteraction>("Sms")
-            .HasValue<MeetingInteraction>("Meeting");
+            .HasDiscriminator<InteractionType>(nameof(Interaction.Type))
+            .HasValue<EmailInteraction>(InteractionType.Email)
+            .HasValue<SmsInteraction>(InteractionType.Sms)
+            .HasValue<MeetingInteraction>(InteractionType.Meeting);
         
         builder.Entity<Interaction>()
             .Property(i => i.Type)
